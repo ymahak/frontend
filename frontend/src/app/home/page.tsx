@@ -1,33 +1,58 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Container,
   Box,
   Grid,
   Card,
-  CardContent,
-  CardMedia,
 } from "@mui/material";
-import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
-import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
-import SportsCricketIcon from "@mui/icons-material/SportsCricket";
+import ChatIcon from "@mui/icons-material/Chat";
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+import StarsIcon from "@mui/icons-material/Stars";
 
-export default function SportsHomePage() {
+export default function HomePage() {
+  const featuredEvents = [
+    {
+      title: "FIFA Women’s World Cup",
+      desc: "Witness the world’s best women footballers in action.",
+      img: "https://images.unsplash.com/photo-1624395213132-1fba7f35a8b1?auto=format&fit=crop&w=1650&q=80",
+    },
+    {
+      title: "WNBA Finals",
+      desc: "Experience the thrill of women’s basketball at its peak.",
+      img: "https://images.unsplash.com/photo-1504457046787-70fc6a9b9b39?auto=format&fit=crop&w=1650&q=80",
+    },
+    {
+      title: "Women’s Tennis Open",
+      desc: "Top-ranked players competing for glory.",
+      img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1650&q=80",
+    },
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  // auto-advance every 5s
+  useEffect(() => {
+    const interval = setInterval(
+      () => setCurrent((prev) => (prev + 1) % featuredEvents.length),
+      5000
+    );
+    return () => clearInterval(interval);
+  }, [featuredEvents.length]);
+
   return (
     <>
-
       {/* Hero Section */}
       <Box
         sx={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1505843770571-2a9b6e04a9d4?auto=format&fit=crop&w=1650&q=80)",
+            "url(https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1650&q=80)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "70vh",
+          minHeight: "75vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -37,10 +62,10 @@ export default function SportsHomePage() {
       >
         <Box sx={{ bgcolor: "rgba(0,0,0,0.5)", p: 4, borderRadius: 2 }}>
           <Typography variant="h2" fontWeight="bold" gutterBottom>
-            Welcome to SportsHub
+            Welcome to WomenSportsHub
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Your ultimate destination for live scores, match updates, and sports news
+            Celebrating women in sports – news, games, collectibles & community
           </Typography>
           <Button
             variant="contained"
@@ -48,107 +73,123 @@ export default function SportsHomePage() {
             size="large"
             sx={{ mt: 3 }}
           >
-            Explore Now
+            Join the Community
           </Button>
         </Box>
       </Box>
 
-      {/* Sports Categories */}
+      {/* Custom Carousel Section */}
       <Container sx={{ py: 6 }}>
         <Typography variant="h4" align="center" fontWeight="bold" gutterBottom>
-          Popular Sports
+          Featured Events
         </Typography>
-        <Grid container spacing={4} justifyContent="center" sx={{ mt: 2 }}>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card sx={{ textAlign: "center", p: 3 }}>
-              <SportsSoccerIcon sx={{ fontSize: 60, color: "primary.main" }} />
-              <Typography variant="h6" mt={2}>
-                Football
-              </Typography>
-            </Card>
-          </Grid>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card sx={{ textAlign: "center", p: 3 }}>
-              <SportsBasketballIcon sx={{ fontSize: 60, color: "secondary.main" }} />
-              <Typography variant="h6" mt={2}>
-                Basketball
-              </Typography>
-            </Card>
-          </Grid>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card sx={{ textAlign: "center", p: 3 }}>
-              <SportsCricketIcon sx={{ fontSize: 60, color: "success.main" }} />
-              <Typography variant="h6" mt={2}>
-                Cricket
-              </Typography>
-            </Card>
-          </Grid>
-        </Grid>
+        <Box sx={{ position: "relative", overflow: "hidden", borderRadius: 2, mt: 3 }}>
+          {featuredEvents.map((item, i) => (
+            <Box
+              key={i}
+              sx={{
+                position: i === current ? "relative" : "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: { xs: 250, md: 400 },
+                backgroundImage: `url(${item.img})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: i === current ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+            >
+              <Box
+                sx={{
+                  bgcolor: "rgba(0,0,0,0.5)",
+                  p: 4,
+                  borderRadius: 2,
+                  textAlign: "center",
+                }}
+              >
+                <Typography variant="h5" fontWeight="bold">
+                  {item.title}
+                </Typography>
+                <Typography variant="body1">{item.desc}</Typography>
+              </Box>
+            </Box>
+          ))}
+
+          {/* Manual navigation dots */}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 10,
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            {featuredEvents.map((_, i) => (
+              <Box
+                key={i}
+                onClick={() => setCurrent(i)}
+                sx={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  bgcolor: i === current ? "white" : "grey.500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
       </Container>
 
-      {/* Featured Matches */}
+      {/* Categories Section */}
       <Container sx={{ py: 6 }}>
         <Typography variant="h4" align="center" fontWeight="bold" gutterBottom>
-          Featured Matches
+          Explore
         </Typography>
         <Grid container spacing={4} sx={{ mt: 2 }}>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="180"
-                image="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&q=80"
-                alt="Football Match"
-              />
-              <CardContent>
-                <Typography variant="h6">Champions League Final</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Real Madrid vs Liverpool – 10 PM
-                </Typography>
-              </CardContent>
+          <Grid size={{ xs: 12, sm: 4, md: 4 }}>
+            <Card sx={{ textAlign: "center", p: 3 }}>
+              <ChatIcon sx={{ fontSize: 60, color: "primary.main" }} />
+              <Typography variant="h6" mt={2}>
+                Chat with Fans
+              </Typography>
+              <Typography variant="body2" color="text.secondary" mt={1}>
+                Join real-time conversations and share your passion for sports.
+              </Typography>
             </Card>
           </Grid>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="180"
-                image="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=800&q=80"
-                alt="Basketball Match"
-              />
-              <CardContent>
-                <Typography variant="h6">NBA Finals</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lakers vs Warriors – 8 PM
-                </Typography>
-              </CardContent>
+          <Grid size={{ xs: 12, sm: 4, md: 4 }}>
+            <Card sx={{ textAlign: "center", p: 3 }}>
+              <SportsEsportsIcon sx={{ fontSize: 60, color: "secondary.main" }} />
+              <Typography variant="h6" mt={2}>
+                Fun Games
+              </Typography>
+              <Typography variant="body2" color="text.secondary" mt={1}>
+                Play trivia, fantasy leagues, and interactive sports games.
+              </Typography>
             </Card>
           </Grid>
-          <Grid size={{xs:12, sm: 4}}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="180"
-                image="https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80"
-                alt="Cricket Match"
-              />
-              <CardContent>
-                <Typography variant="h6">T20 World Cup</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  India vs Australia – 6 PM
-                </Typography>
-              </CardContent>
+          <Grid size={{ xs: 12, sm: 4, md: 4 }}>
+            <Card sx={{ textAlign: "center", p: 3 }}>
+              <StarsIcon sx={{ fontSize: 60, color: "success.main" }} />
+              <Typography variant="h6" mt={2}>
+                Collectibles
+              </Typography>
+              <Typography variant="body2" color="text.secondary" mt={1}>
+                Own digital collectibles and celebrate your favorite athletes.
+              </Typography>
             </Card>
           </Grid>
         </Grid>
       </Container>
-
-      {/* Footer */}
-      <Box sx={{ bgcolor: "grey.900", color: "white", textAlign: "center", py: 3 }}>
-        <Typography variant="body2">
-          © {new Date().getFullYear()} SportsHub. All rights reserved.
-        </Typography>
-      </Box>
     </>
   );
 }
