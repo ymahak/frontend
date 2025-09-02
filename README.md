@@ -2,9 +2,9 @@
 
 ## Frontend
 
-1. Layout : Ritesh (pending)
+1. Layout : Ritesh Done
 
 ## Backend
 
-1. Login : Mahak (pending)
-2. Signup: Mahak (pending)
+1. Login : Mahak Done
+2. Signup: Mahak Done
